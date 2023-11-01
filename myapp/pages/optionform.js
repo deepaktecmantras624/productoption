@@ -5,12 +5,12 @@ import { v4 as uuidv4 } from "uuid";
 const OptionForm = () => {
   const [optionName, setOptionName] = useState("");
   const [optionType, setOptionType] = useState("");
-  // const [optionId, setOptionId]=useState(0)
+
   const [typeNames, setTypeNames] = useState([]);
-  const [newTypeName, setNewTypeName] = useState("");
+  //   const [newTypeName, setNewTypeName] = useState("");
   const [mainArray, setMainArray] = useState([]);
-  const [parentId, setParentId] = useState("");
-  console.log("🚀 ~ file: optionform.js:13 ~ OptionForm ~ parentId:", parentId);
+  //   const [parentId, setParentId] = useState("");
+  //   console.log("🚀 ~ file: optionform.js:13 ~ OptionForm ~ parentId:", parentId);
 
   const handleOptionTypeChange = (e) => {
     setOptionType(e.target.value);
@@ -20,60 +20,115 @@ const OptionForm = () => {
   const generateTypeNameId = () => {
     return uuidv4();
   };
+  //   ---------------------------------------------------
 
-  const handleAddTypeName = () => {
-    if (newTypeName) {
-      //   const typeNameId = generateTypeNameId(); // Generate unique ID for typeName
-      const newTypeNameObject = {
-        optionId: parentId,
-        name: newTypeName,
-        optionValueId: generateTypeNameId(),
-      };
-      setTypeNames([...typeNames, newTypeNameObject]);
-      setNewTypeName("");
+  const [inputValues, setInputValues] = useState([]);
+  console.log(
+    "🚀 ~ file: optionform.js:27 ~ OptionForm ~ inputValues:",
+    inputValues
+  );
 
-      // Update localStorage for typeNames
-      const typeNameData = JSON.parse(localStorage.getItem("typeNames")) || [];
-      localStorage.setItem(
-        "typeNames",
-        JSON.stringify([...typeNameData, newTypeNameObject])
-      );
-    }
+  const handleInputChange = (index, event) => {
+    const newInputValues = [...inputValues];
+    newInputValues[index] = event.target.value;
+    setInputValues(newInputValues);
   };
 
+  const addInputField = () => {
+    setInputValues([...inputValues, ""]); // Add an empty input field
+  };
+
+  const removeInputField = (index) => {
+    const newInputValues = [...inputValues];
+    newInputValues.splice(index, 1);
+    setInputValues(newInputValues);
+  };
+
+  // ===============================================================
+
+  //   const handleAddTypeName = () => {
+  //     if (newTypeName) {
+  //       //   const typeNameId = generateTypeNameId(); // Generate unique ID for typeName
+  //       const newTypeNameObject = {
+  //         optionId: parentId,
+  //         name: newTypeName,
+  //         optionValueId: generateTypeNameId(),
+  //       };
+  //       setTypeNames([...typeNames, newTypeNameObject]);
+  //       setNewTypeName("");
+
+  //       // Update localStorage for typeNames
+  //       const typeNameData = JSON.parse(localStorage.getItem("typeNames")) || [];
+  //       localStorage.setItem(
+  //         "typeNames",
+  //         JSON.stringify([...typeNameData, newTypeNameObject])
+  //       );
+  //     }
+  //   };
+
+  //   const handleAddOption = () => {
+
+  //     const newOption = {
+  //         id: uuidv4(),
+  //         name: optionName,
+  //         type: optionType,
+  //         typeNames: inputValues.map((value) => ({ name: value, optionId:parentId, optionValueId: generateTypeNameId() })),
+  //       };
+
+  //       // Update mainArray state with the new option
+  //       setMainArray([...mainArray, newOption]);
+
+  //       // Reset form fields and input values
+  //       setOptionName("");
+  //       setOptionType("");
+  //       setInputValues([]);
+
+  //       // Update localStorage for options
+  //       const optionData = JSON.parse(localStorage.getItem("options")) || [];
+  //       localStorage.setItem("options", JSON.stringify([...optionData, newOption]));
+
+  //       // Update localStorage for typeNames
+  //       const typeNameData = JSON.parse(localStorage.getItem("typeNames")) || [];
+  //       const newTypeNames = inputValues.map((value) => ({
+  //         optionId: newOption.id,
+  //         name: value,
+  //         optionValueId: generateTypeNameId(),
+  //       }));
+  //       localStorage.setItem("typeNames", JSON.stringify([...typeNameData, ...newTypeNames]));
+  //     }
   const handleAddOption = () => {
-    let newTypeNames = [];
+    const newOptionId = uuidv4(); // Generate a new unique ID for the option
+    const newTypeNames = inputValues.map((value) => ({
+      optionId: newOptionId, // Use the newly generated option ID here
+      name: value,
+      optionValueId: generateTypeNameId(),
+    }));
 
-    if ((optionType === "text" || optionType === "date") && optionName) {
-      // For text and date options, typeNames remains an empty array
-    } else if (
-      optionType !== "text" &&
-      optionType !== "date" &&
-      optionName &&
-      typeNames.length > 0
-    ) {
-      // For other option types, store typeNames as an array of objects
-      newTypeNames = typeNames;
-    }
-
-    const optionid = uuidv4();
-    setParentId(optionid);
     const newOption = {
-      id: optionid,
+      id: newOptionId, // Assign the same ID to the option object
       name: optionName,
       type: optionType,
-      typeNames: newTypeNames,
+      typeNames: newTypeNames, // Use the modified typeNames array
     };
 
+    // Update mainArray state with the new option
     setMainArray([...mainArray, newOption]);
+
+    // Reset form fields and input values
     setOptionName("");
     setOptionType("");
-    setTypeNames([]);
-    setNewTypeName("");
+    setInputValues([]);
 
-    //  Update localStorage for options
+    // Update localStorage for options
     const optionData = JSON.parse(localStorage.getItem("options")) || [];
     localStorage.setItem("options", JSON.stringify([...optionData, newOption]));
+
+    // Update localStorage for typeNames
+    const typeNameData = JSON.parse(localStorage.getItem("typeNames")) || [];
+    localStorage.setItem(
+      "typeNames",
+      JSON.stringify([...typeNameData, ...newTypeNames])
+    );
   };
 
   //   useEffect(() => {
@@ -81,7 +136,7 @@ const OptionForm = () => {
   //   }, [mainArray]);
 
   return (
-    <div className="container mx-auto my-10 p-6 bg-gray-100 rounded-lg shadow-md">
+    <div className="container mx-auto my-10 p-6 bg-gray-100 rounded-lg shadow-lg">
       <Link
         className="text-blue-500 hover:underline block text-center mb-6"
         href="/product"
@@ -119,7 +174,7 @@ const OptionForm = () => {
           <option value="date">Date</option>
         </select>
       </div>
-      {(optionType === "checkbox" || optionType === "radio") && (
+      {/* {(optionType === "checkbox" || optionType === "radio") && (
         <div>
           <h3 className="block text-sm font-semibold text-gray-600">
             {optionType === "checkbox" ? "Checkbox" : "Radio"} Type Names
@@ -156,7 +211,20 @@ const OptionForm = () => {
             Add {optionType === "checkbox" ? "Checkbox" : "Radio"} Type Name
           </button>
         </div>
-      )}
+      )} */}
+      {inputValues.map((value, index) => (
+        <div key={index}>
+          <input
+            type="text"
+            value={value}
+            onChange={(event) => handleInputChange(index, event)}
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500 mr-4"
+          />
+          <button className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300" onClick={() => removeInputField(index)}>Remove</button>
+        </div>
+      ))}
+      <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 mb-4" onClick={addInputField}>Add Input Field</button>
+
       <br />
       <button
         className="px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:border-green-300"
