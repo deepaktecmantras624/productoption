@@ -9,6 +9,8 @@ const OptionForm = () => {
   const [typeNames, setTypeNames] = useState([]);
   const [newTypeName, setNewTypeName] = useState("");
   const [mainArray, setMainArray] = useState([]);
+  const [parentId, setParentId] = useState("");
+  console.log("🚀 ~ file: optionform.js:13 ~ OptionForm ~ parentId:", parentId);
 
   const handleOptionTypeChange = (e) => {
     setOptionType(e.target.value);
@@ -21,15 +23,22 @@ const OptionForm = () => {
 
   const handleAddTypeName = () => {
     if (newTypeName) {
-      const typeNameId = generateTypeNameId(); // Generate unique ID for typeName
+      //   const typeNameId = generateTypeNameId(); // Generate unique ID for typeName
       const newTypeNameObject = {
-        id: typeNameId,
+        optionId: parentId,
         name: newTypeName,
+        optionValueId: generateTypeNameId(),
       };
       setTypeNames([...typeNames, newTypeNameObject]);
       setNewTypeName("");
-    
-    } 
+
+      // Update localStorage for typeNames
+      const typeNameData = JSON.parse(localStorage.getItem("typeNames")) || [];
+      localStorage.setItem(
+        "typeNames",
+        JSON.stringify([...typeNameData, newTypeNameObject])
+      );
+    }
   };
 
   const handleAddOption = () => {
@@ -47,8 +56,10 @@ const OptionForm = () => {
       newTypeNames = typeNames;
     }
 
+    const optionid = uuidv4();
+    setParentId(optionid);
     const newOption = {
-      id: uuidv4(),
+      id: optionid,
       name: optionName,
       type: optionType,
       typeNames: newTypeNames,
@@ -59,11 +70,15 @@ const OptionForm = () => {
     setOptionType("");
     setTypeNames([]);
     setNewTypeName("");
+
+    //  Update localStorage for options
+    const optionData = JSON.parse(localStorage.getItem("options")) || [];
+    localStorage.setItem("options", JSON.stringify([...optionData, newOption]));
   };
 
-  useEffect(() => {
-    localStorage.setItem("options", JSON.stringify(mainArray));
-  }, [mainArray]);
+  //   useEffect(() => {
+  //     localStorage.setItem("options", JSON.stringify(mainArray));
+  //   }, [mainArray]);
 
   return (
     <div className="container mx-auto my-10 p-6 bg-gray-100 rounded-lg shadow-md">
