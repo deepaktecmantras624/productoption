@@ -25,6 +25,7 @@ const Productform = ({ product }) => {
         type: optionType,
         names: selectedOptions,
       };
+      console.log("🚀 ~ file: productForm.js:28 ~ handleAddButtonClick ~ newOption.selectedOptions:", newOption.selectedOptions)
 
       setProductOption((prevOptions) => [...prevOptions, newOption]);
       setSelectedOptions([]);
@@ -131,7 +132,7 @@ const Productform = ({ product }) => {
                 </option>
                 {filteredOptions[0].typeNames &&
                   filteredOptions[0].typeNames.map((option, index) => (
-                    <option key={index} value={option}>
+                    <option key={index} value={option.name}>
                       {option.name}
                     </option>
                   ))}
