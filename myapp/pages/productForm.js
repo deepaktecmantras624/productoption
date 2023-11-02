@@ -37,7 +37,7 @@ const Productform = ({ product }) => {
   }, [product.id]);
 
 
-
+// Adding the option in the productOption
   const handleAddButtonClick = () => {
     if (optionType && selectedOptions && quantity > 0) {
       const newOption = {
@@ -64,15 +64,25 @@ const Productform = ({ product }) => {
     }
   };
 
+
+  // Delete functionality 
   const handleDelete = (index) => {
-    const productKey = `productOptions_${product.id}`;
-    const updatedData = [...productOptions];
-    updatedData.splice(index, 1);
-    setProductOptions(updatedData);
+    const shouldDelete = window.confirm("Are you sure you want to delete this item?");
+    
+    if (shouldDelete) {
+      const productKey = `productOptions_${product.id}`;
+      const updatedData = [...productOptions];
+      updatedData.splice(index, 1);
+      setProductOptions(updatedData);
   
-    // Update the data in localStorage for the specific product
-    localStorage.setItem(productKey, JSON.stringify(updatedData));
+      // Update the data in localStorage for the specific product
+      localStorage.setItem(productKey, JSON.stringify(updatedData));
+    }
   };
+  
+
+
+  
   useEffect(() => {
     localStorage.setItem("productOptions", JSON.stringify(productOptions));
   }, [productOptions]);
