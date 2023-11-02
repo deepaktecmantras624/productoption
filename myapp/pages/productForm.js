@@ -40,9 +40,18 @@ const Productform = ({ product }) => {
     }
   };
 
+const handleDelete=(index)=>{
+  const updateData=[...productOptions]
+  updateData.splice(index,1)
+  setProductOptions(updateData)
+  localStorage.setItem("productOption", JSON.stringify(updateData))
+}
+
   useEffect(() => {
     localStorage.setItem("productOptions", JSON.stringify(productOptions));
   }, [productOptions]);
+
+
 
 
 
@@ -60,6 +69,8 @@ const Productform = ({ product }) => {
               : item.optionName}
           </td>
           <td>{item.quantity}</td>
+          <td><button className="btn bg-red-600 hover:bg-red-700 text-white" onClick={()=>handleDelete(index)}>Delete</button></td>
+
         </tr>
       ))
     );
@@ -192,6 +203,8 @@ const Productform = ({ product }) => {
                 <th className="border px-4 py-2">Option Type</th>
                 <th className="border px-4 py-2">Option Name</th>
                 <th className="border px-4 py-2">Quantity</th>
+                <th className="border px-4 py-2">Action</th>
+
 
               </tr>
             </thead>

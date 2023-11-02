@@ -116,14 +116,14 @@ const OptionList = () => {
               </td>
               <td className="py-2 px-4 border-b">
                 <button
-                  className="btn bg-orange-400 mr-5"
+                 className="btn bg-orange-500 hover:bg-orange-600 text-white mr-2"
                   onClick={() => handleEditClick(option)}
                   disabled={!!editedOption}
                 >
                   Edit
                 </button>
                 <button
-                  className="btn bg-red-700"
+                  className="btn bg-red-600 hover:bg-red-700 text-white"
                   onClick={() => handleDelete(option.id)}
                 >
                   Delete
