@@ -24,29 +24,55 @@ const Productform = ({ product }) => {
   console.log("🚀 ~ file: productForm.js:7 ~ Productform ~ options:", options);
   
 
+
+  useEffect(() => {
+    const productKey = `productOptions_${product.id}`;
+    const savedProductOptions = localStorage.getItem(productKey);
+    if (savedProductOptions) {
+      setProductOptions(JSON.parse(savedProductOptions));
+    } else {
+      // If no saved options found, initialize with an empty array
+      setProductOptions([]);
+    }
+  }, [product.id]);
+
+
+
   const handleAddButtonClick = () => {
     if (optionType && selectedOptions && quantity > 0) {
       const newOption = {
         optionId: selectedOptions.optionId,
         optionValueId: selectedOptions.optionValueId,
-        optionName:selectedOptions.name,
+        optionName: selectedOptions.name,
         quantity: quantity,
         type: optionType,
       };
-
-      setProductOptions([...productOptions, newOption]);
+  
+      // Generate a unique key for the product (you can use the product ID)
+      const productKey = `productOptions_${product.id}`;
+  
+      // Retrieve existing productOptions from localStorage or create an empty array
+      const existingProductOptions = JSON.parse(localStorage.getItem(productKey)) || [];
+  
+      // Update the productOptions for the specific product
+      const updatedProductOptions = [...existingProductOptions, newOption];
+      localStorage.setItem(productKey, JSON.stringify(updatedProductOptions));
+  
+      setProductOptions(updatedProductOptions);
       setSelectedOptions("");
       setQuantity(1);
     }
   };
 
-const handleDelete=(index)=>{
-  const updateData=[...productOptions]
-  updateData.splice(index,1)
-  setProductOptions(updateData)
-  localStorage.setItem("productOption", JSON.stringify(updateData))
-}
-
+  const handleDelete = (index) => {
+    const productKey = `productOptions_${product.id}`;
+    const updatedData = [...productOptions];
+    updatedData.splice(index, 1);
+    setProductOptions(updatedData);
+  
+    // Update the data in localStorage for the specific product
+    localStorage.setItem(productKey, JSON.stringify(updatedData));
+  };
   useEffect(() => {
     localStorage.setItem("productOptions", JSON.stringify(productOptions));
   }, [productOptions]);
