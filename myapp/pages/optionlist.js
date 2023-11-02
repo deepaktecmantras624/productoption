@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const OptionList = () => {
   const [options, setOptions] = useState([]);
@@ -27,7 +28,11 @@ const OptionList = () => {
   };
 
   const handleAddType = () => {
-    setInputValues([...inputValues, ""]);
+    setInputValues([...inputValues, { id: generateUniqueId(), name: "" }]);
+  };
+  const generateUniqueId = () => {
+    // Generate a unique ID (you can use any suitable method for this)
+    return uuidv4();
   };
 
   const handleRemoveType = (index) => {
@@ -38,18 +43,26 @@ const OptionList = () => {
 
   const handleSaveEdit = () => {
     if (editedOption) {
-      const updatedOptions = options.map((option) =>
-        option.id === editedOption.id
-          ? {
-              ...option,
-              name: optionName,
-              type: optionType,
-              typeNames: inputValues.map((value) => ({ name: value })),
-            }
-          : option
-      );
-
+      const updatedOptions = options.map((option) => {
+        console.log("🚀 ~ file: optionlist.js:55 ~ handleSaveEdit ~ option:", option.typeNames)
+        console.log('inputValues',inputValues)
+        return option.id === editedOption.id
+          	? {
+              	...option,
+              	name: optionName,
+              	type: optionType,
+              	typeNames: inputValues.map((value) => ({
+                	optionId: option.id,
+                	optionValueId: value.id || generateUniqueId(),
+                	name: value,
+              	})),
+            	}
+          	: option
+      	
+      });
+      console.log("🚀 ~ file: optionlist.js:59 ~ handleSaveEdit ~ updatedOptions:", updatedOptions)
       localStorage.setItem("options", JSON.stringify(updatedOptions));
+      
 
       setOptions(updatedOptions);
       setEditedOption(null);
@@ -67,7 +80,7 @@ const OptionList = () => {
 
   return (
     <div className="container mx-auto my-10 p-6 bg-gray-100 rounded-lg shadow-lg">
-       <Link
+      <Link
         className="text-blue-500 hover:underline block text-center mb-6"
         href="/product"
       >

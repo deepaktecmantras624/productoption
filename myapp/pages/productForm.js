@@ -4,8 +4,11 @@ import Link from "next/link";
 const Productform = ({ product }) => {
   const [optionType, setOptionType] = useState("checkbox");
   const [options, setOptions] = useState([]);
+  console.log("🚀 ~ file: productForm.js:7 ~ Productform ~ options:", options)
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [productOption, setProductOption] = useState([]);
+  console.log("🚀 ~ file: productForm.js:9 ~ Productform ~ selectedOptions:", selectedOptions)
+  const [productOptions, setProductOptions] = useState([]);
+  const [quantity, setQuantity]=useState(1)
 
   console.log("🚀 ~ file: productForm.js:7 ~ Productform ~ options:", options);
   useEffect(() => {
@@ -19,46 +22,62 @@ const Productform = ({ product }) => {
     }
   }, []);
   console.log("🚀 ~ file: productForm.js:7 ~ Productform ~ options:", options);
+  
+
   const handleAddButtonClick = () => {
-    if (optionType && selectedOptions.length > 0) {
+    if (optionType && selectedOptions && quantity > 0) {
       const newOption = {
+        optionId: selectedOptions.optionId,
+        optionValueId: selectedOptions.optionValueId,
+        optionName:selectedOptions.name,
+        quantity: quantity,
         type: optionType,
-        names: selectedOptions,
       };
-      console.log("🚀 ~ file: productForm.js:28 ~ handleAddButtonClick ~ newOption.selectedOptions:", newOption.selectedOptions)
 
-      setProductOption((prevOptions) => [...prevOptions, newOption]);
-      setSelectedOptions([]);
-
-      console.log(
-        "🚀 ~ file: productForm.js:39 ~ handleAddButtonClick ~ productOption:",
-        productOption
-      );
-      localStorage.setItem("productOption", JSON.stringify(productOption));
+      setProductOptions([...productOptions, newOption]);
+      setSelectedOptions("");
+      setQuantity(1);
     }
   };
 
+  useEffect(() => {
+    localStorage.setItem("productOptions", JSON.stringify(productOptions));
+  }, [productOptions]);
+
+
+
+  console.log("🚀 ~ file: productForm.js:63 ~ generateTableRows ~ productOptions:", productOptions)
   const generateTableRows = () => {
-    console.log("productOption:", productOption);
+    // console.log("productOption:", productOption);
     return (
-      productOption &&
-      productOption.map((item, index) => (
+      productOptions &&
+      productOptions.map((item, index) => (
         <tr key={index}>
           <td>{item.type}</td>
           <td>
-            {Array.isArray(item.names)
-              ? item.names.map((nameObj) => nameObj.name).join(", ")
-              : item.names}
+            {Array.isArray(item.optionName) 
+              ? item.optionName.map((nameObj) => nameObj.name).join(", ")
+              : item.optionName}
           </td>
+          <td>{item.quantity}</td>
         </tr>
       ))
     );
   };
 
-  console.log(
-    "🚀 ~ file: productForm.js:43 ~ Productform ~ displayData:",
-    productOption
-  );
+  
+  const handleSelectChange = (e) => {
+    const [optionValueId, name, optionId] = e.target.value.split(',');
+    setSelectedOptions({
+      optionValueId: optionValueId,
+      name: name,
+      optionId: optionId
+    });
+    console.log(selectedOptions);
+  };
+
+  
+
 
   const filteredOptions = options.filter(
     (option) => option.type === optionType
@@ -124,23 +143,36 @@ const Productform = ({ product }) => {
             ) : (
               <select
                 className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-300"
-                value={selectedOptions}
-                onChange={(e) => setSelectedOptions(e.target.value)}
+                value={`${selectedOptions.optionValueId},${selectedOptions.name},${selectedOptions.optionId}`}
+                // onChange={(e) => setSelectedOptions(e.target.value)}
+                onChange={handleSelectChange}
               >
                 <option value="" disabled>
                   Select an option
                 </option>
                 {filteredOptions[0].typeNames &&
                   filteredOptions[0].typeNames.map((option, index) => (
-                    <option key={index} value={option.name}>
+                    <option key={index} value={`${option.optionValueId},${option.name},${option.optionId}`} >
                       {option.name}
                     </option>
                   ))}
               </select>
+                
             )}
+            <div>
+
+           <label className="block text-sm font-semibold text-gray-600">
+            Quantity
+          </label>
+            <input
+        type="number"
+        value={quantity}
+        onChange={(e) => setQuantity(parseInt(e.target.value))}
+        />
+        </div>
           </>
         )}
-
+              
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
           onClick={handleAddButtonClick}
@@ -159,6 +191,8 @@ const Productform = ({ product }) => {
               <tr className="bg-gray-200">
                 <th className="border px-4 py-2">Option Type</th>
                 <th className="border px-4 py-2">Option Name</th>
+                <th className="border px-4 py-2">Quantity</th>
+
               </tr>
             </thead>
             <tbody>{generateTableRows()}</tbody>

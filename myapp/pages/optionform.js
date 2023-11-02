@@ -7,10 +7,8 @@ const OptionForm = () => {
   const [optionType, setOptionType] = useState("");
 
   const [typeNames, setTypeNames] = useState([]);
-  //   const [newTypeName, setNewTypeName] = useState("");
+
   const [mainArray, setMainArray] = useState([]);
-  //   const [parentId, setParentId] = useState("");
-  //   console.log("🚀 ~ file: optionform.js:13 ~ OptionForm ~ parentId:", parentId);
 
   const handleOptionTypeChange = (e) => {
     setOptionType(e.target.value);
@@ -53,10 +51,10 @@ const OptionForm = () => {
     }));
 
     const newOption = {
-      id: newOptionId, // Assign the same ID to the option object
+      id: newOptionId,
       name: optionName,
       type: optionType,
-      typeNames: newTypeNames, // Use the modified typeNames array
+      typeNames: newTypeNames,
     };
 
     // Update mainArray state with the new option
@@ -78,10 +76,6 @@ const OptionForm = () => {
       JSON.stringify([...typeNameData, ...newTypeNames])
     );
   };
-
-  //   useEffect(() => {
-  //     localStorage.setItem("options", JSON.stringify(mainArray));
-  //   }, [mainArray]);
 
   return (
     <div className="container mx-auto my-10 p-6 bg-gray-100 rounded-lg shadow-lg">
@@ -105,7 +99,7 @@ const OptionForm = () => {
           Option Name
         </label>
         <input
-          type="text"  
+          type="text"
           placeholder="Option Name"
           className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
           value={optionName}
@@ -129,44 +123,7 @@ const OptionForm = () => {
           <option value="date">Date</option>
         </select>
       </div>
-      {/* {(optionType === "checkbox" || optionType === "radio") && (
-        <div>
-          <h3 className="block text-sm font-semibold text-gray-600">
-            {optionType === "checkbox" ? "Checkbox" : "Radio"} Type Names
-          </h3>
-          {typeNames.map((typeName, index) => (
-            <div key={index}>
-              <input
-                type="text"
-                className="w-full mr-2 px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
-                value={typeName.name}
-                onChange={(e) => {
-                  const updatedNames = [...typeNames];
-                  updatedNames[index] = e.target.value;
-                  setTypeNames(updatedNames);
-                }}
-              />
-            </div>
-          ))}
-          {optionType !== "text" && (
-            <input
-              type="text"
-              className="w-full mr-2 px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
-              placeholder={`${
-                optionType === "checkbox" ? "Checkbox" : "Radio"
-              } Type Name`}
-              value={newTypeName}
-              onChange={(e) => setNewTypeName(e.target.value)}
-            />
-          )}
-          <button
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
-            onClick={handleAddTypeName}
-          >
-            Add {optionType === "checkbox" ? "Checkbox" : "Radio"} Type Name
-          </button>
-        </div>
-      )} */}
+
       {inputValues.map((value, index) => (
         <div key={index}>
           <input
@@ -175,10 +132,20 @@ const OptionForm = () => {
             onChange={(event) => handleInputChange(index, event)}
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500 mr-4"
           />
-          <button className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300" onClick={() => removeInputField(index)}>Remove</button>
+          <button
+            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300"
+            onClick={() => removeInputField(index)}
+          >
+            Remove
+          </button>
         </div>
       ))}
-      <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 mb-4" onClick={addInputField}>Add Input Field</button>
+      <button
+        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 mb-4"
+        onClick={addInputField}
+      >
+        Add Input Field
+      </button>
 
       <br />
       <button
