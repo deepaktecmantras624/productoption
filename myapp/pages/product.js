@@ -15,6 +15,12 @@ const product = ({ repo }) => {
       >
         Go to Option Form
       </Link>
+      <Link
+        className="text-blue-500 hover:underline block text-center mb-6"
+        href="/optionlist"
+      >
+        Go to Option Table
+      </Link>
       <table className="min-w-full border border-gray-300">
         <thead>
           <tr>

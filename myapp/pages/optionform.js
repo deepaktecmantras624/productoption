@@ -44,58 +44,6 @@ const OptionForm = () => {
     setInputValues(newInputValues);
   };
 
-  // ===============================================================
-
-  //   const handleAddTypeName = () => {
-  //     if (newTypeName) {
-  //       //   const typeNameId = generateTypeNameId(); // Generate unique ID for typeName
-  //       const newTypeNameObject = {
-  //         optionId: parentId,
-  //         name: newTypeName,
-  //         optionValueId: generateTypeNameId(),
-  //       };
-  //       setTypeNames([...typeNames, newTypeNameObject]);
-  //       setNewTypeName("");
-
-  //       // Update localStorage for typeNames
-  //       const typeNameData = JSON.parse(localStorage.getItem("typeNames")) || [];
-  //       localStorage.setItem(
-  //         "typeNames",
-  //         JSON.stringify([...typeNameData, newTypeNameObject])
-  //       );
-  //     }
-  //   };
-
-  //   const handleAddOption = () => {
-
-  //     const newOption = {
-  //         id: uuidv4(),
-  //         name: optionName,
-  //         type: optionType,
-  //         typeNames: inputValues.map((value) => ({ name: value, optionId:parentId, optionValueId: generateTypeNameId() })),
-  //       };
-
-  //       // Update mainArray state with the new option
-  //       setMainArray([...mainArray, newOption]);
-
-  //       // Reset form fields and input values
-  //       setOptionName("");
-  //       setOptionType("");
-  //       setInputValues([]);
-
-  //       // Update localStorage for options
-  //       const optionData = JSON.parse(localStorage.getItem("options")) || [];
-  //       localStorage.setItem("options", JSON.stringify([...optionData, newOption]));
-
-  //       // Update localStorage for typeNames
-  //       const typeNameData = JSON.parse(localStorage.getItem("typeNames")) || [];
-  //       const newTypeNames = inputValues.map((value) => ({
-  //         optionId: newOption.id,
-  //         name: value,
-  //         optionValueId: generateTypeNameId(),
-  //       }));
-  //       localStorage.setItem("typeNames", JSON.stringify([...typeNameData, ...newTypeNames]));
-  //     }
   const handleAddOption = () => {
     const newOptionId = uuidv4(); // Generate a new unique ID for the option
     const newTypeNames = inputValues.map((value) => ({
@@ -143,6 +91,13 @@ const OptionForm = () => {
       >
         Go to dashboard
       </Link>
+
+      <Link
+        className="text-blue-500 hover:underline block text-center mb-6"
+        href="/optionlist"
+      >
+        Go to Option Table
+      </Link>
       <h1 className="text-3xl font-bold mb-6">Option Form</h1>
 
       <div className="mb-4">
@@ -150,7 +105,7 @@ const OptionForm = () => {
           Option Name
         </label>
         <input
-          type="text"
+          type="text"  
           placeholder="Option Name"
           className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
           value={optionName}
