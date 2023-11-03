@@ -5,10 +5,9 @@ import { v4 as uuidv4 } from "uuid";
 const OptionForm = () => {
   const [optionName, setOptionName] = useState("");
   const [optionType, setOptionType] = useState("");
-
   const [typeNames, setTypeNames] = useState([]);
-
   const [mainArray, setMainArray] = useState([]);
+  const [inputValues, setInputValues] = useState([]);
 
   const handleOptionTypeChange = (e) => {
     setOptionType(e.target.value);
@@ -20,11 +19,6 @@ const OptionForm = () => {
   };
   //   ---------------------------------------------------
 
-  const [inputValues, setInputValues] = useState([]);
-  console.log(
-    "🚀 ~ file: optionform.js:27 ~ OptionForm ~ inputValues:",
-    inputValues
-  );
 
   const handleInputChange = (index, event) => {
     const newInputValues = [...inputValues];
@@ -118,8 +112,7 @@ const OptionForm = () => {
         >
           <option value="">option</option>
           <option value="checkbox">Checkbox</option>
-          <option value="radio">Radio</option>
-         
+          <option value="radio">Radio</option> 
         </select>
       </div>
 
@@ -151,7 +144,7 @@ const OptionForm = () => {
         className="px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:border-green-300"
         onClick={handleAddOption}
       >
-        Add Option
+        Save Option
       </button>
 
       {mainArray.length > 0 && (

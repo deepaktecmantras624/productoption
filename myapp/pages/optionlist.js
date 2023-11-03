@@ -45,8 +45,6 @@ const OptionList = () => {
   const handleSaveEdit = () => {
     if (editedOption) {
       const updatedOptions = options.map((option) => {
-        console.log("🚀 ~ file: optionlist.js:55 ~ handleSaveEdit ~ option:", option.typeNames)
-        console.log('inputValues',inputValues)
         return option.id === editedOption.id
           	? {
               	...option,
@@ -61,10 +59,7 @@ const OptionList = () => {
           	: option
       	
       });
-      console.log("🚀 ~ file: optionlist.js:59 ~ handleSaveEdit ~ updatedOptions:", updatedOptions)
       localStorage.setItem("options", JSON.stringify(updatedOptions));
-      
-
       setOptions(updatedOptions);
       setEditedOption(null);
       setOptionName("");

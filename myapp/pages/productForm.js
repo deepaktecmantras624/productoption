@@ -4,12 +4,7 @@ import Link from "next/link";
 const Productform = ({ product }) => {
   const [optionType, setOptionType] = useState("checkbox");
   const [options, setOptions] = useState([]);
-
   const [selectedOptions, setSelectedOptions] = useState([]);
-  console.log(
-    "🚀 ~ file: productForm.js:9 ~ Productform ~ selectedOptions:",
-    selectedOptions
-  );
   const [productOptions, setProductOptions] = useState([]);
   const [quantity, setQuantity] = useState(1);
 

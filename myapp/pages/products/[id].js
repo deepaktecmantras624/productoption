@@ -13,7 +13,9 @@ const ProductDetailPage = () => {
     // Fetch product details based on ID from the API
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/products/${id}`);
+        const response = await axios.get(
+          `http://localhost:8080/products/${id}`
+        );
         setProduct(response.data); // Assuming the API response contains product data
       } catch (error) {
         console.error("Error fetching product:", error);
@@ -24,12 +26,6 @@ const ProductDetailPage = () => {
       fetchProduct();
     }
   }, [id]);
-
-//   const handleAddToCart = (product) => {
-//     // Implement your addToCart logic here, dispatch Redux action or store in state
-//     // Example: dispatch(addToCart(product));
-//     console.log("Product added to cart:", product);
-//   };
 
   return <>{product && <Productform product={product} />}</>;
 };
