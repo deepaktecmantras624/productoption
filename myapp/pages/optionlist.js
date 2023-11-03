@@ -60,6 +60,7 @@ const OptionList = () => {
       	
       });
       localStorage.setItem("options", JSON.stringify(updatedOptions));
+      localStorage.setItem("typeNames", JSON.stringify(updatedOptions.flatMap(option => option.typeNames)));
       setOptions(updatedOptions);
       setEditedOption(null);
       setOptionName("");
