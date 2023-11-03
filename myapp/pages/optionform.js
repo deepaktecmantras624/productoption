@@ -119,8 +119,7 @@ const OptionForm = () => {
           <option value="">option</option>
           <option value="checkbox">Checkbox</option>
           <option value="radio">Radio</option>
-          <option value="text">Text</option>
-          <option value="date">Date</option>
+         
         </select>
       </div>
 
@@ -133,7 +132,7 @@ const OptionForm = () => {
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500 mr-4"
           />
           <button
-            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300"
+            className="px-4 py-2 mt-1 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300"
             onClick={() => removeInputField(index)}
           >
             Remove
@@ -141,7 +140,7 @@ const OptionForm = () => {
         </div>
       ))}
       <button
-        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 mb-4"
+        className="px-4 py-2 mt-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 mb-4"
         onClick={addInputField}
       >
         Add Input Field
