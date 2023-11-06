@@ -5,9 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 const OptionList = () => {
   const [options, setOptions] = useState([]);
   const [editedOption, setEditedOption] = useState(null);
-  const [optionName, setOptionName] = useState("");
-  const [optionType, setOptionType] = useState("");
-  const [inputValues, setInputValues] = useState([]);
+  const [optionDatas,setOptionDatas]=useState({name:"", type:"", inputValues:[]})
 
   useEffect(() => {
     const optionData = JSON.parse(localStorage.getItem("options")) || [];
@@ -15,21 +13,18 @@ const OptionList = () => {
   }, []);
 
   const handleEditClick = (option) => {
-    setEditedOption(option);
-    setOptionName(option.name);
-    setOptionType(option.type);
-    setInputValues(option.typeNames.map((typeName) => typeName.name));
+    setEditedOption(option); 
+    setOptionDatas({name:option.name, type:option.type, inputValues:option.typeNames.map((typeName)=>typeName.name)})
   };
 
   const handleInputChange = (index, event) => {
-    const newInputValues = [...inputValues];
+    const newInputValues = [...optionDatas.inputValues];
     newInputValues[index] = event.target.value;
-    setInputValues(newInputValues);
+    setOptionDatas({...optionDatas, inputValues:newInputValues})
   };
 
-  const handleAddType = () => {
-    // setInputValues([...inputValues, { id: generateUniqueId(), name: "" }]);
-    setInputValues([...inputValues, ""]);
+  const addInputField = () => {
+    setOptionDatas({...optionDatas, inputValues:[...optionDatas.inputValues, ""]}) // Add an empty input field
   };
   const generateUniqueId = () => {
     // Generate a unique ID (you can use any suitable method for this)
@@ -37,9 +32,9 @@ const OptionList = () => {
   };
 
   const handleRemoveType = (index) => {
-    const newInputValues = [...inputValues];
+    const newInputValues = [...optionDatas.inputValues];
     newInputValues.splice(index, 1);
-    setInputValues(newInputValues);
+    setOptionDatas({...optionDatas, inputValues:newInputValues})
   };
 
   const handleSaveEdit = () => {
@@ -47,13 +42,13 @@ const OptionList = () => {
       const updatedOptions = options.map((option) => {
         return option.id === editedOption.id
           ? {
-              ...option,
-              name: optionName,
-              type: optionType,
-              typeNames: inputValues.map((value) => ({
-                optionId: option.id,
-                optionValueId: value.id || generateUniqueId(),
-                name: value,
+              ...option,             
+              name:optionDatas.name,     
+              type:optionDatas.type,
+              typeNames:optionDatas.inputValues.map((value)=>({
+                optionId:option.id,
+                optionValueId:value.id || generateUniqueId(),
+                name:value
               })),
             }
           : option;
@@ -62,15 +57,15 @@ const OptionList = () => {
       localStorage.setItem("typeNames",JSON.stringify(updatedOptions.flatMap((option) => option.typeNames)));
       setOptions(updatedOptions);
       setEditedOption(null);
-      setOptionName("");
-      setOptionType("");
-      setInputValues([]);
+      setOptionDatas({name:"", type:"", inputValues:[]})
     }
   };
 
   const handleDelete = (id) => {
     const newUpdateOptionAfterDelete = options.filter((e) => e.id !== id);
     localStorage.setItem("options", JSON.stringify(newUpdateOptionAfterDelete));
+    localStorage.setItem("typeNames", JSON.stringify(newUpdateOptionAfterDelete.flatMap((option)=>option.typeNames)));
+
     setOptions(newUpdateOptionAfterDelete);
   };
 
@@ -140,8 +135,9 @@ const OptionList = () => {
             </label>
             <input
               type="text"
-              value={optionName}
-              onChange={(e) => setOptionName(e.target.value)}
+              value={optionDatas.name}
+              onChange={(e) => setOptionDatas({ ...optionDatas, name: e.target.value })}
+
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
             />
           </div>
@@ -151,8 +147,8 @@ const OptionList = () => {
             </label>
             <select
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-600"
-              value={optionType}
-              onChange={(e) => setOptionType(e.target.value)}
+              value={optionDatas.type}
+              onChange={(e) => setOptionDatas({...optionDatas, type:e.target.value})}
             >
               <option value="checkbox">Checkbox</option>
               <option value="radio">Radio</option>
@@ -162,7 +158,7 @@ const OptionList = () => {
             <label className="block text-sm font-semibold text-gray-600">
               Type Names
             </label>
-            {inputValues.map((value, index) => (
+            { optionDatas.inputValues.map((value, index) => (
               <div key={index} className="flex items-center mb-2">
                 <input
                   type="text"
@@ -180,7 +176,7 @@ const OptionList = () => {
             ))}
             <button
               className="btn bg-blue-500 text-white"
-              onClick={handleAddType}
+              onClick={addInputField}
             >
               Add Type Name
             </button>
