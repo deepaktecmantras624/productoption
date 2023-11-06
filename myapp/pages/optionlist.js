@@ -5,7 +5,11 @@ import { v4 as uuidv4 } from "uuid";
 const OptionList = () => {
   const [options, setOptions] = useState([]);
   const [editedOption, setEditedOption] = useState(null);
-  const [optionDatas,setOptionDatas]=useState({name:"", type:"", inputValues:[]})
+  const [optionDatas, setOptionDatas] = useState({
+    name: "",
+    type: "",
+    inputValues: [],
+  });
 
   useEffect(() => {
     const optionData = JSON.parse(localStorage.getItem("options")) || [];
@@ -13,18 +17,25 @@ const OptionList = () => {
   }, []);
 
   const handleEditClick = (option) => {
-    setEditedOption(option); 
-    setOptionDatas({name:option.name, type:option.type, inputValues:option.typeNames.map((typeName)=>typeName.name)})
+    setEditedOption(option);
+    setOptionDatas({
+      name: option.name,
+      type: option.type,
+      inputValues: option.typeNames.map((typeName) => typeName.name),
+    });
   };
 
   const handleInputChange = (index, event) => {
     const newInputValues = [...optionDatas.inputValues];
     newInputValues[index] = event.target.value;
-    setOptionDatas({...optionDatas, inputValues:newInputValues})
+    setOptionDatas({ ...optionDatas, inputValues: newInputValues });
   };
 
   const addInputField = () => {
-    setOptionDatas({...optionDatas, inputValues:[...optionDatas.inputValues, ""]}) // Add an empty input field
+    setOptionDatas({
+      ...optionDatas,
+      inputValues: [...optionDatas.inputValues, ""],
+    }); // Add an empty input field
   };
   const generateUniqueId = () => {
     // Generate a unique ID (you can use any suitable method for this)
@@ -34,7 +45,7 @@ const OptionList = () => {
   const handleRemoveType = (index) => {
     const newInputValues = [...optionDatas.inputValues];
     newInputValues.splice(index, 1);
-    setOptionDatas({...optionDatas, inputValues:newInputValues})
+    setOptionDatas({ ...optionDatas, inputValues: newInputValues });
   };
 
   const handleSaveEdit = () => {
@@ -42,30 +53,37 @@ const OptionList = () => {
       const updatedOptions = options.map((option) => {
         return option.id === editedOption.id
           ? {
-              ...option,             
-              name:optionDatas.name,     
-              type:optionDatas.type,
-              typeNames:optionDatas.inputValues.map((value)=>({
-                optionId:option.id,
-                optionValueId:value.id || generateUniqueId(),
-                name:value
+              ...option,
+              name: optionDatas.name,
+              type: optionDatas.type,
+              typeNames: optionDatas.inputValues.map((value) => ({
+                optionId: option.id,
+                optionValueId: value.id || generateUniqueId(),
+                name: value,
               })),
             }
           : option;
       });
-      localStorage.setItem("options", JSON.stringify(updatedOptions)); 
-      localStorage.setItem("typeNames",JSON.stringify(updatedOptions.flatMap((option) => option.typeNames)));
+      localStorage.setItem("options", JSON.stringify(updatedOptions));
+      localStorage.setItem(
+        "typeNames",
+        JSON.stringify(updatedOptions.flatMap((option) => option.typeNames))
+      );
       setOptions(updatedOptions);
       setEditedOption(null);
-      setOptionDatas({name:"", type:"", inputValues:[]})
+      setOptionDatas({ name: "", type: "", inputValues: [] });
     }
   };
 
   const handleDelete = (id) => {
     const newUpdateOptionAfterDelete = options.filter((e) => e.id !== id);
     localStorage.setItem("options", JSON.stringify(newUpdateOptionAfterDelete));
-    localStorage.setItem("typeNames", JSON.stringify(newUpdateOptionAfterDelete.flatMap((option)=>option.typeNames)));
-
+    localStorage.setItem(
+      "typeNames",
+      JSON.stringify(
+        newUpdateOptionAfterDelete.flatMap((option) => option.typeNames)
+      )
+    );
     setOptions(newUpdateOptionAfterDelete);
   };
 
@@ -136,8 +154,9 @@ const OptionList = () => {
             <input
               type="text"
               value={optionDatas.name}
-              onChange={(e) => setOptionDatas({ ...optionDatas, name: e.target.value })}
-
+              onChange={(e) =>
+                setOptionDatas({ ...optionDatas, name: e.target.value })
+              }
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
             />
           </div>
@@ -148,17 +167,19 @@ const OptionList = () => {
             <select
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-600"
               value={optionDatas.type}
-              onChange={(e) => setOptionDatas({...optionDatas, type:e.target.value})}
+              onChange={(e) =>
+                setOptionDatas({ ...optionDatas, type: e.target.value })
+              }
             >
               <option value="checkbox">Checkbox</option>
               <option value="radio">Radio</option>
             </select>
-          </div>  
+          </div>
           <div className="mb-2">
             <label className="block text-sm font-semibold text-gray-600">
               Type Names
             </label>
-            { optionDatas.inputValues.map((value, index) => (
+            {optionDatas.inputValues.map((value, index) => (
               <div key={index} className="flex items-center mb-2">
                 <input
                   type="text"
