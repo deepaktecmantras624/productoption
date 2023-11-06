@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const OptionForm = () => {
-  const [options, setOptions] = useState({ name: "", type: "" });
+  const [options, setOptions] = useState({ name: "", type: "", inputValues:[] });
   const [mainArray, setMainArray] = useState([]);
-  const [inputValues, setInputValues] = useState([]);
+  
 
   const handleOptionTypeChange = (e) => {
     setOptions({ ...options, type: e.target.value });
@@ -16,24 +16,24 @@ const OptionForm = () => {
   };
   //   ---------------------------------------------------
   const handleInputChange = (index, event) => {
-    const newInputValues = [...inputValues];
+    const newInputValues = [...options.inputValues];
     newInputValues[index] = event.target.value;
-    setInputValues(newInputValues);
+    setOptions({...options, inputValues:newInputValues})
   };
 
   const addInputField = () => {
-    setInputValues([...inputValues, ""]); // Add an empty input field
+    setOptions({...options, inputValues:[...options.inputValues, ""]}) // Add an empty input field
   };
 
   const removeInputField = (index) => {
-    const newInputValues = [...inputValues];
+    const newInputValues = [...options.inputValues];
     newInputValues.splice(index, 1);
-    setInputValues(newInputValues);
+    setOptions({...options, inputValues:newInputValues})
   };
 
   const handleAddOption = () => {
     const newOptionId = uuidv4(); // Generate a new unique ID for the option
-    const newTypeNames = inputValues.map((value) => ({
+    const newTypeNames = options.inputValues.map((value) => ({
       optionId: newOptionId, // Use the newly generated option ID here
       name: value,
       optionValueId: generateTypeNameId(),
@@ -50,8 +50,8 @@ const OptionForm = () => {
     setMainArray([...mainArray, newOption]);
 
     // Reset form fields and input values
-    setOptions({ name: "", type: "" });
-    setInputValues([]);
+    setOptions({ name: "", type: "", inputValues:[] });
+    
 
     // Update localStorage for options
     const optionData = JSON.parse(localStorage.getItem("options")) || [];
@@ -110,7 +110,7 @@ const OptionForm = () => {
         </select>
       </div>
 
-      {inputValues.map((value, index) => (
+      {options.inputValues.map((value, index) => (
         <div key={index}>
           <input
             type="text"
