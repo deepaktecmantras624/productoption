@@ -29,7 +29,7 @@ const OptionList = () => {
 
   const handleAddType = () => {
     // setInputValues([...inputValues, { id: generateUniqueId(), name: "" }]);
-    setInputValues([...inputValues, ""])
+    setInputValues([...inputValues, ""]);
   };
   const generateUniqueId = () => {
     // Generate a unique ID (you can use any suitable method for this)
@@ -46,21 +46,20 @@ const OptionList = () => {
     if (editedOption) {
       const updatedOptions = options.map((option) => {
         return option.id === editedOption.id
-          	? {
-              	...option,
-              	name: optionName,
-              	type: optionType,
-              	typeNames: inputValues.map((value) => ({
-                	optionId: option.id,
-                	optionValueId: value.id || generateUniqueId(),
-                	name: value,
-              	})),
-            	}
-          	: option
-      	
+          ? {
+              ...option,
+              name: optionName,
+              type: optionType,
+              typeNames: inputValues.map((value) => ({
+                optionId: option.id,
+                optionValueId: value.id || generateUniqueId(),
+                name: value,
+              })),
+            }
+          : option;
       });
-      localStorage.setItem("options", JSON.stringify(updatedOptions));
-      localStorage.setItem("typeNames", JSON.stringify(updatedOptions.flatMap(option => option.typeNames)));
+      localStorage.setItem("options", JSON.stringify(updatedOptions)); 
+      localStorage.setItem("typeNames",JSON.stringify(updatedOptions.flatMap((option) => option.typeNames)));
       setOptions(updatedOptions);
       setEditedOption(null);
       setOptionName("");
@@ -113,7 +112,7 @@ const OptionList = () => {
               </td>
               <td className="py-2 px-4 border-b">
                 <button
-                 className="btn bg-orange-500 hover:bg-orange-600 text-white mr-2 rounded-md p-1"
+                  className="btn bg-orange-500 hover:bg-orange-600 text-white mr-2 rounded-md p-1"
                   onClick={() => handleEditClick(option)}
                   disabled={!!editedOption}
                 >
@@ -150,23 +149,15 @@ const OptionList = () => {
             <label className="block text-sm font-semibold text-gray-600">
               Type
             </label>
-            {/* <input
-              type="text"
+            <select
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-600"
               value={optionType}
               onChange={(e) => setOptionType(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
-            /> */}
-            <select
-          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-600"
-          value={optionType}
-          onChange={(e)=>setOptionType(e.target.value)}
-        >
-          
-          <option value="checkbox">Checkbox</option>
-          <option value="radio">Radio</option>
-         
-        </select>
-          </div>
+            >
+              <option value="checkbox">Checkbox</option>
+              <option value="radio">Radio</option>
+            </select>
+          </div>  
           <div className="mb-2">
             <label className="block text-sm font-semibold text-gray-600">
               Type Names

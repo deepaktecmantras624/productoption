@@ -3,23 +3,18 @@ import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const OptionForm = () => {
-  const [optionName, setOptionName] = useState("");
-  const [optionType, setOptionType] = useState("");
-  const [typeNames, setTypeNames] = useState([]);
+  const [options, setOptions] = useState({ name: "", type: "" });
   const [mainArray, setMainArray] = useState([]);
   const [inputValues, setInputValues] = useState([]);
 
   const handleOptionTypeChange = (e) => {
-    setOptionType(e.target.value);
-    setTypeNames([]);
+    setOptions({ ...options, type: e.target.value });
   };
 
   const generateTypeNameId = () => {
     return uuidv4();
   };
   //   ---------------------------------------------------
-
-
   const handleInputChange = (index, event) => {
     const newInputValues = [...inputValues];
     newInputValues[index] = event.target.value;
@@ -46,8 +41,8 @@ const OptionForm = () => {
 
     const newOption = {
       id: newOptionId,
-      name: optionName,
-      type: optionType,
+      name: options.name,
+      type: options.type,
       typeNames: newTypeNames,
     };
 
@@ -55,8 +50,7 @@ const OptionForm = () => {
     setMainArray([...mainArray, newOption]);
 
     // Reset form fields and input values
-    setOptionName("");
-    setOptionType("");
+    setOptions({ name: "", type: "" });
     setInputValues([]);
 
     // Update localStorage for options
@@ -96,8 +90,8 @@ const OptionForm = () => {
           type="text"
           placeholder="Option Name"
           className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
-          value={optionName}
-          onChange={(e) => setOptionName(e.target.value)}
+          value={options.name}
+          onChange={(e) => setOptions({ ...options, name: e.target.value })}
           required
         />
       </div>
@@ -107,7 +101,7 @@ const OptionForm = () => {
         </label>
         <select
           className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-600"
-          value={optionType}
+          value={options.type}
           onChange={handleOptionTypeChange}
         >
           <option value="">option</option>
