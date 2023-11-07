@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from "uuid";
 const OptionForm = () => {
   const [options, setOptions] = useState({ name: "", type: "", inputValues:[] });
   const [mainArray, setMainArray] = useState([]);
-  
 
   const handleOptionTypeChange = (e) => {
     setOptions({ ...options, type: e.target.value });
@@ -14,7 +13,7 @@ const OptionForm = () => {
   const generateTypeNameId = () => {
     return uuidv4();
   };
-  //   ---------------------------------------------------
+
   const handleInputChange = (index, event) => {
     const newInputValues = [...options.inputValues];
     newInputValues[index] = event.target.value;
