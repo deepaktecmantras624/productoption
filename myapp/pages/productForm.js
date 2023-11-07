@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { LOCALSTORAGE_NAME, LOCALSTORAGE_NAME_PRODUCT } from "@/common/constant";
+
 
 const Productform = ({ product }) => {
   const [optionType, setOptionType] = useState("checkbox");
   const [options, setOptions] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState({});
   const [productOptions, setProductOptions] = useState([]);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    const savedOptions = localStorage.getItem("options");
+    const savedOptions = localStorage.getItem(LOCALSTORAGE_NAME);
     if (savedOptions) {
       setOptions(JSON.parse(savedOptions));
     }
@@ -28,7 +30,7 @@ const Productform = ({ product }) => {
 
   // Adding the option in the productOption
   const handleAddButtonClick = () => {
-    if (optionType && selectedOptions && quantity > 0) {
+    if (selectedOptions.optionId && selectedOptions.optionValueId && quantity > 0) {
       const newOption = {
         optionId: selectedOptions.optionId,
         optionValueId: selectedOptions.optionValueId,
@@ -36,7 +38,6 @@ const Productform = ({ product }) => {
         quantity: quantity,
         type: optionType,
       };
-
       // Generate a unique key for the product (you can use the product ID)
       const productKey = `productOptions_${product.id}`;
 
@@ -72,14 +73,14 @@ const Productform = ({ product }) => {
   };
 
   useEffect(() => {
-    localStorage.setItem("productOptions", JSON.stringify(productOptions));
+    localStorage.setItem(LOCALSTORAGE_NAME_PRODUCT, JSON.stringify(productOptions));
   }, [productOptions]);
 
   // Display the selected option in a table
   const generateTableRows = () => {
     return (
-      productOptions &&
-      productOptions.map((item, index) => (
+      
+      productOptions?.map((item, index) => (
         <tr key={index}>
           <td>{item.type}</td>
           <td>
@@ -104,11 +105,17 @@ const Productform = ({ product }) => {
   const handleSelectChange = (e) => {
     const [optionValueId, name, optionId] = e.target.value.split(",");
     setSelectedOptions({
+      
       optionValueId: optionValueId,
       name: name,
       optionId: optionId,
     });
-    console.log(selectedOptions);
+
+    const selectedOption=options.find((option)=>option.id === parseInt(optionId))
+    if(selectedOption){
+      setOptionType(selectedOption.type)
+    }
+    console.log("🚀 ~ file: productForm.js:108 ~ handleSelectChange ~ setSelectedOptions:", selectedOptions)
   };
 
   const filteredOptions = options.filter(
@@ -156,7 +163,7 @@ const Productform = ({ product }) => {
             onChange={(e) => setOptionType(e.target.value)}
           >
             {options?.map((option, index) => (
-              <option key={index} value={option.value}>
+              <option key={option.id} value={option.value}>
                 {option.type}
               </option>
             ))}

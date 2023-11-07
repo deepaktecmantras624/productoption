@@ -1,3 +1,4 @@
+import { LOCALSTORAGE_NAME } from "@/common/constant";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -54,15 +55,17 @@ const OptionForm = () => {
 
     // Update localStorage for options
     const optionData = JSON.parse(localStorage.getItem("options")) || [];
-    localStorage.setItem("options", JSON.stringify([...optionData, newOption]));
+    localStorage.setItem(LOCALSTORAGE_NAME, JSON.stringify([...optionData, newOption]));
 
     // Update localStorage for typeNames
-    const typeNameData = JSON.parse(localStorage.getItem("typeNames")) || [];
-    localStorage.setItem(
-      "typeNames",
-      JSON.stringify([...typeNameData, ...newTypeNames])
-    );
+    // const typeNameData = JSON.parse(localStorage.getItem("typeNames")) || [];
+    // localStorage.setItem(
+    //   "typeNames",
+    //   JSON.stringify([...typeNameData, ...newTypeNames])
+    // );
   };
+  
+  console.log('XXXXXX',mainArray);
 
   return (
     <div className="container mx-auto my-10 p-6 bg-gray-100 rounded-lg shadow-lg">
@@ -103,24 +106,26 @@ const OptionForm = () => {
           value={options.type}
           onChange={handleOptionTypeChange}
         >
-          <option value="">option</option>
+          <option value="" disabled>Option Type</option>
           <option value="checkbox">Checkbox</option>
           <option value="radio">Radio</option> 
         </select>
       </div>
 
+       
       {options.inputValues.map((value, index) => (
         <div key={index}>
+
           <input
             type="text"
             value={value}
             onChange={(event) => handleInputChange(index, event)}
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500 mr-4"
-          />
+            />
           <button
             className="px-4 py-2 mt-1 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300"
             onClick={() => removeInputField(index)}
-          >
+            >
             Remove
           </button>
         </div>
@@ -153,16 +158,14 @@ const OptionForm = () => {
               </tr>
             </thead>
             <tbody>
-              {mainArray.map((option, index) => (
-                <tr key={index}>
+              {mainArray?.map((option, index) => (
+                <tr key={option.id}>
                   <td className="py-2 px-4 border-b">{option.id}</td>
                   <td className="py-2 px-4 border-b">{option.name}</td>
                   <td className="py-2 px-4 border-b">{option.type}</td>
                   <td className="py-2 px-4 border-b">
-                    {option.typeNames &&
-                      option.typeNames
-                        .map((typeName) => typeName.name)
-                        .join(", ")}
+                    {
+                      option.typeNames?.map((typeName) => typeName.name).join(", ")}
                   </td>
                 </tr>
               ))}

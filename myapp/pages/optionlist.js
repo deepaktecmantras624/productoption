@@ -1,3 +1,4 @@
+import { LOCALSTORAGE_NAME } from "@/common/constant";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -12,7 +13,7 @@ const OptionList = () => {
   });
 
   useEffect(() => {
-    const optionData = JSON.parse(localStorage.getItem("options")) || [];
+    const optionData = JSON.parse(localStorage.getItem(LOCALSTORAGE_NAME)) || [];
     setOptions(optionData);
   }, []);
 
@@ -64,11 +65,12 @@ const OptionList = () => {
             }
           : option;
       });
-      localStorage.setItem("options", JSON.stringify(updatedOptions));
-      localStorage.setItem(
-        "typeNames",
-        JSON.stringify(updatedOptions.flatMap((option) => option.typeNames))
-      );
+
+      localStorage.setItem(LOCALSTORAGE_NAME, JSON.stringify(updatedOptions)); 
+      // localStorage.setItem("typeNames",JSON.stringify(updatedOptions.flatMap((option) => option.typeNames)));
+
+     
+
       setOptions(updatedOptions);
       setEditedOption(null);
       setOptionDatas({ name: "", type: "", inputValues: [] });
@@ -77,13 +79,11 @@ const OptionList = () => {
 
   const handleDelete = (id) => {
     const newUpdateOptionAfterDelete = options.filter((e) => e.id !== id);
-    localStorage.setItem("options", JSON.stringify(newUpdateOptionAfterDelete));
-    localStorage.setItem(
-      "typeNames",
-      JSON.stringify(
-        newUpdateOptionAfterDelete.flatMap((option) => option.typeNames)
-      )
-    );
+
+    localStorage.setItem(LOCALSTORAGE_NAME, JSON.stringify(newUpdateOptionAfterDelete));
+    // localStorage.setItem("typeNames", JSON.stringify(newUpdateOptionAfterDelete.flatMap((option)=>option.typeNames)));
+
+
     setOptions(newUpdateOptionAfterDelete);
   };
 
@@ -115,13 +115,12 @@ const OptionList = () => {
         </thead>
         <tbody>
           {options.map((option, index) => (
-            <tr key={index}>
+            <tr key={option.id}>
               <td className="py-2 px-4 border-b">{option.id}</td>
               <td className="py-2 px-4 border-b">{option.name}</td>
               <td className="py-2 px-4 border-b">{option.type}</td>
               <td className="py-2 px-4 border-b">
-                {option.typeNames &&
-                  option.typeNames.map((typeName) => typeName.name).join(", ")}
+                { option.typeNames?.map((typeName) => typeName.name).join(", ")}
               </td>
               <td className="py-2 px-4 border-b">
                 <button
