@@ -75,6 +75,7 @@ const Productform = ({ product }) => {
     localStorage.setItem("productOptions", JSON.stringify(productOptions));
   }, [productOptions]);
 
+  console.log("🚀 ~ file: productForm.js:82 ~ generateTableRows ~ productOptions:", productOptions)
   // Display the selected option in a table
   const generateTableRows = () => {
     return (
@@ -177,6 +178,7 @@ const Productform = ({ product }) => {
                   <option
                     key={index}
                     value={`${option.optionValueId},${option.name},${option.optionId}`}
+                    
                   >
                     {option.name}
                   </option>

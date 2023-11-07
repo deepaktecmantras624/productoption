@@ -103,7 +103,7 @@ const OptionForm = () => {
           value={options.type}
           onChange={handleOptionTypeChange}
         >
-          <option value="">option</option>
+          <option value="" disabled>Select Type</option>
           <option value="checkbox">Checkbox</option>
           <option value="radio">Radio</option> 
         </select>
