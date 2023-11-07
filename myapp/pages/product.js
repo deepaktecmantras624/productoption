@@ -8,7 +8,7 @@ const product = ({ repo }) => {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-4xl font-bold text-center mb-8">Product Table</h1>
+      <h1 className="text-4xl font-bold text-center mb-8">Product Table List</h1>
       <Link
         className="text-blue-500 hover:underline block text-center mb-6"
         href="/optionform"
