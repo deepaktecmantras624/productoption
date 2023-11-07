@@ -31,8 +31,8 @@ const product = ({ repo }) => {
           </tr>
         </thead>
         <tbody>
-          {repo &&
-            repo.map((product) => (
+          {
+            repo?.map((product) => (
               <tr key={product.id}>
                 <td className="border py-2 px-4">
                   <img
