@@ -11,8 +11,6 @@ const Productform = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
   const [optionid,setOptionId]=useState('')
   const [optionValues ,setOptionValues] = useState([]);
-  // console.log("🚀 ~ file: productForm.js:13 ~ Productform ~ optionid:", optionid)
-  console.log("🚀 ~ file: productForm.js:10 ~ Productform ~ selectedOptions:", selectedOptions)
   
   useEffect(()=>{
     const optionValueList =  localStorage.getItem(LOCALSTORAGE_NAME);
@@ -170,7 +168,10 @@ const Productform = ({ product }) => {
           className="text-blue-500 hover:underline block text-center mb-6"
           href="/product"
         >
+
           Product List
+
+
         </Link>
         <Link
           className="text-blue-500 hover:underline block text-center mb-6"

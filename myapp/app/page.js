@@ -16,7 +16,7 @@ export default function Home() {
 
   return (
     <main>
-    <h1 className="text-4xl text-red-700 text-center py-8">Please Wait...</h1>
+    <h1 className="text-4xl text-red-700 text-center py-8">Hello Everyone, Please Wait...</h1>
     </main>
   );
 }
