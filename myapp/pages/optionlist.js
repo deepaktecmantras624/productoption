@@ -93,7 +93,7 @@ const OptionList = () => {
         className="text-blue-500 hover:underline block text-center mb-6"
         href="/product"
       >
-        Go to dashboard
+        Go to Product List
       </Link>
 
       <Link

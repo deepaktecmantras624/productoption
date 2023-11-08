@@ -4,11 +4,19 @@ import { LOCALSTORAGE_NAME, LOCALSTORAGE_NAME_PRODUCT } from "@/common/constant"
 
 
 const Productform = ({ product }) => {
-  const [optionType, setOptionType] = useState("checkbox");
+  const [optionType, setOptionType] = useState('');
   const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [productOptions, setProductOptions] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const [optionid,setOptionId]=useState('')
+  const [optionValues ,setOptionValues] = useState([]);
+  
+  useEffect(()=>{
+    const optionValueList =  localStorage.getItem(LOCALSTORAGE_NAME);
+    //console.log('zzzzz',JSON.parse(optionValueList));
+    console.log('xxxx',JSON.parse(optionValueList).filter((option)=> option.id == optionid));
+  },[optionid]);
 
   useEffect(() => {
     const savedOptions = localStorage.getItem(LOCALSTORAGE_NAME);
@@ -50,7 +58,8 @@ const Productform = ({ product }) => {
       localStorage.setItem(productKey, JSON.stringify(updatedProductOptions));
 
       setProductOptions(updatedProductOptions);
-      setSelectedOptions("");
+      // setSelectedOptions("");
+      setSelectedOptions({})
       setQuantity(1);
     }
   };
@@ -77,35 +86,62 @@ const Productform = ({ product }) => {
   }, [productOptions]);
 
   // Display the selected option in a table
+  // const generateTableRows = () => {
+  //   return (
+      
+  //     productOptions?.map((item, index) => (
+  //       <tr key={index}>
+  //         <td>{item.type}</td>
+  //         <td>
+  //           {Array.isArray(item.optionName)
+  //             ? item.optionName.map((nameObj) => nameObj.name).join(", ")
+  //             : item.optionName}
+  //         </td>
+  //         <td>{item.quantity}</td>
+  //         <td>
+  //           <button
+  //             className="btn bg-red-600 hover:bg-red-700 text-white"
+  //             onClick={() => handleDelete(index)}
+  //           >
+  //             Delete
+  //           </button>
+  //         </td>
+  //       </tr>
+  //     ))
+  //   );
+  // };
+
   const generateTableRows = () => {
     return (
-      
-      productOptions?.map((item, index) => (
-        <tr key={index}>
-          <td>{item.type}</td>
-          <td>
-            {Array.isArray(item.optionName)
-              ? item.optionName.map((nameObj) => nameObj.name).join(", ")
-              : item.optionName}
-          </td>
-          <td>{item.quantity}</td>
-          <td>
-            <button
-              className="btn bg-red-600 hover:bg-red-700 text-white"
-              onClick={() => handleDelete(index)}
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-      ))
+      productOptions?.map((item, index) => {
+        const selectedOption = options.find(option => option.id === item.optionId);
+        const optionType = selectedOption ? selectedOption.type : '';
+        return (
+          <tr key={index}>
+            <td>{optionType}</td>
+            <td>
+              {Array.isArray(item.optionName)
+                ? item.optionName.map(nameObj => nameObj.name).join(", ")
+                : item.optionName}
+            </td>
+            <td>{item.quantity}</td>
+            <td>
+              <button
+                className="btn bg-red-600 hover:bg-red-700 text-white"
+                onClick={() => handleDelete(index)}
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        );
+      })
     );
   };
-
+  
   const handleSelectChange = (e) => {
     const [optionValueId, name, optionId] = e.target.value.split(",");
-    setSelectedOptions({
-      
+    setSelectedOptions({  
       optionValueId: optionValueId,
       name: name,
       optionId: optionId,
@@ -114,13 +150,16 @@ const Productform = ({ product }) => {
     const selectedOption=options.find((option)=>option.id === parseInt(optionId))
     if(selectedOption){
       setOptionType(selectedOption.type)
+      setOptionValues(selectedOption.typeNames);
     }
-    console.log("🚀 ~ file: productForm.js:108 ~ handleSelectChange ~ setSelectedOptions:", selectedOptions)
+    // setSelectedOptions({ optionValueId: '', name: '', optionId: '' })
+    // console.log("🚀 ~ file: productForm.js:108 ~ handleSelectChange ~ setSelectedOptions:", selectedOptions)
   };
-
+ 
   const filteredOptions = options.filter(
-    (option) => option.type === optionType
+    (option) => option.id === optionid
   );
+    
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-12 bg-gray-100">
@@ -129,7 +168,10 @@ const Productform = ({ product }) => {
           className="text-blue-500 hover:underline block text-center mb-6"
           href="/product"
         >
-          Go to Product List
+
+          Product List
+
+
         </Link>
         <Link
           className="text-blue-500 hover:underline block text-center mb-6"
@@ -160,10 +202,12 @@ const Productform = ({ product }) => {
           <select
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-600"
             value={optionType}
-            onChange={(e) => setOptionType(e.target.value)}
-          >
+            // onChange={(e) => setOptionType(e.target.value)}
+            onChange={(e) => [setOptionId(e.target.value), setOptionType(e.target.value)]}
+          > 
+            <option>--SELECT--</option>
             {options?.map((option, index) => (
-              <option key={option.id} value={option.value}>
+              <option key={option.id} value={option.id}>
                 {option.type}
               </option>
             ))}
@@ -176,9 +220,7 @@ const Productform = ({ product }) => {
               value={`${selectedOptions.optionValueId},${selectedOptions.name},${selectedOptions.optionId}`}
               onChange={handleSelectChange}
             >
-              <option value="" disabled>
-                Select an option
-              </option>
+             <option>--SELECT--</option>
               {filteredOptions[0].typeNames &&
                 filteredOptions[0].typeNames.map((option, index) => (
                   <option
@@ -189,6 +231,10 @@ const Productform = ({ product }) => {
                   </option>
                 ))}
             </select>
+
+
+
+
             <div>
               <label className="block text-sm font-semibold text-gray-600">
                 Quantity
@@ -210,8 +256,8 @@ const Productform = ({ product }) => {
         </button>
       </div>
       {/* table to show the choose the option */}
-      <div className="mt-4  bg-gray-100">
-        <h3 className="text-xl font-semibold mb-2 text-gray-800">
+      <div className="mt-8 w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
+        <h3 className="text-xl font-semibold mb-2 p-4 bg-gray-200">
           Selected Data:
         </h3>
         <div className="overflow-x-auto">
