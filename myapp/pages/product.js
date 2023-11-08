@@ -8,15 +8,15 @@ const product = ({ repo }) => {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-4xl font-bold text-center mb-8">Product Table</h1>
+      <h1 className="text-4xl font-bold text-center mb-8 text-indigo-700">Product Table</h1>
       <Link
-        className="text-blue-500 hover:underline block text-center mb-6"
+        className="block text-center text-indigo-500 hover:underline mb-4"
         href="/optionform"
       >
         Go to Option Form
       </Link>
       <Link
-        className="text-blue-500 hover:underline block text-center mb-6"
+        className="block text-center text-indigo-500 hover:underline mb-4"
         href="/optionlist"
       >
         Go to Option Table
@@ -38,7 +38,7 @@ const product = ({ repo }) => {
                   <img
                     src={product.image}
                     alt={product.title}
-                    className="w-12 h-12 object-cover"
+                    className="w-12 h-12 object-cover rounded"
                   />
                 </td>
                 <td className="border py-2 px-4">{product.title}</td>
@@ -46,7 +46,7 @@ const product = ({ repo }) => {
                 <td className="border py-2 px-4">
                   <button
                     onClick={() => router.push(`/products/${product.id}`)}
-                    className="py-1 px-2 text-sm font-medium text-white bg-red-800 rounded-lg hover:bg-teal-900"
+                    className="py-1 px-3 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring focus:border-red-800"
                   >
                     Option
                   </button>

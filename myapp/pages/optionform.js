@@ -71,19 +71,19 @@ const OptionForm = () => {
   return (
     <div className="container mx-auto my-10 p-6 bg-gray-100 rounded-lg shadow-lg">
       <Link
-        className="text-blue-500 hover:underline block text-center mb-6"
+        className="text-blue-500 hover:underline mb-2 block text-center"
         href="/product"
       >
         Go to dashboard
       </Link>
 
       <Link
-        className="text-blue-500 hover:underline block text-center mb-6"
+        className="text-blue-500 hover:underline mb-2 block text-center"
         href="/optionlist"
       >
         Go to Option Table
       </Link>
-      <h1 className="text-3xl font-bold mb-6">Option Form</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">Option Form</h1>
 
       <div className="mb-4">
         <label className="block text-sm font-semibold text-gray-600">
@@ -149,6 +149,9 @@ const OptionForm = () => {
       {mainArray.length > 0 && (
         <div className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">Options</h2>
+          <div className="overflow-x-auto">
+
+          
           <table className="min-w-full bg-white border border-gray-300">
             <thead>
               <tr>
@@ -172,6 +175,7 @@ const OptionForm = () => {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
     </div>
